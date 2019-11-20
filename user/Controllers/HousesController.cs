@@ -29,7 +29,7 @@ namespace user.Controllers
 
         // GET: api/Houses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<House>> GetHouse(string id)
+        public async Task<ActionResult<House>> GetHouse(long id)
         {
             var house = await _context.houses.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace user.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHouse(string id, House house)
+        public async Task<IActionResult> PutHouse(long id, House house)
         {
             if (id != house.Id)
             {
@@ -80,28 +80,14 @@ namespace user.Controllers
         public async Task<ActionResult<House>> PostHouse(House house)
         {
             _context.houses.Add(house);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (HouseExists(house.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetHouse", new { id = house.Id }, house);
         }
 
         // DELETE: api/Houses/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<House>> DeleteHouse(string id)
+        public async Task<ActionResult<House>> DeleteHouse(long id)
         {
             var house = await _context.houses.FindAsync(id);
             if (house == null)
@@ -115,7 +101,7 @@ namespace user.Controllers
             return house;
         }
 
-        private bool HouseExists(string id)
+        private bool HouseExists(long id)
         {
             return _context.houses.Any(e => e.Id == id);
         }
